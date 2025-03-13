@@ -7,38 +7,42 @@ namespace ZaneStackedFunctions.Api;
 
 public class GetRandomExcuseFunction
 {
-    private static readonly string[] Excuses =
-    {
-        "My computer exploded.",
-        "I got stuck in an endless email loop.",
-        "My pet python is shedding and needs supervision.",
-        "Aliens abducted my homework.",
-        "The dog ate my laptop.",
-        "I got lost in the metaverse and couldn't escape.",
-        "I accidentally set my alarm for PM instead of AM.",
-        "I was practicing social distancing... from everyone.",
-        "My grandma challenged me to a gaming tournament.",
-        "My Wi-Fi ran out of data.",
-        "The internet was too slow to function.",
-        "I mistakenly set my phone to 'Airplane Mode' and it flew away.",
-        "My cat hid my car keys.",
-        "My dog locked me out.",
-        "My parrot changed my password and won’t tell me what it is.",
-        "Gravity stopped working for me temporarily.",
-        "I got stuck in an existential crisis.",
-        "I was time-traveling and lost track of reality."
-    };
+    private static readonly Excuse[] Excuses =
+    [
+        new() { Id = 1, Text = "My computer exploded.", Category = "work" },
+        new() { Id = 2, Text = "I got stuck in an endless email loop.", Category = "work" },
+        new() { Id = 3, Text = "My pet python is shedding and needs supervision.", Category = "work" },
+        new() { Id = 4, Text = "Aliens abducted my homework.", Category = "school" },
+        new() { Id = 5, Text = "The dog ate my laptop.", Category = "school" },
+        new() { Id = 6, Text = "I got lost in the metaverse and couldn't escape.", Category = "school" },
+        new() { Id = 7, Text = "I accidentally set my alarm for PM instead of AM.", Category = "social" },
+        new() { Id = 8, Text = "I was practicing social distancing... from everyone.", Category = "social" },
+        new() { Id = 9, Text = "My grandma challenged me to a gaming tournament.", Category = "social" },
+        new() { Id = 10, Text = "My Wi-Fi ran out of data.", Category = "technology" },
+        new() { Id = 11, Text = "The internet was too slow to function.", Category = "technology" },
+        new()
+        {
+            Id = 12, Text = "I mistakenly set my phone to 'Airplane Mode' and it flew away.", Category = "technology"
+        },
+        new() { Id = 13, Text = "My cat hid my car keys.", Category = "pets" },
+        new() { Id = 14, Text = "My dog locked me out.", Category = "pets" },
+        new() { Id = 15, Text = "My parrot changed my password and won’t tell me what it is.", Category = "pets" },
+        new() { Id = 16, Text = "Gravity stopped working for me temporarily.", Category = "general" },
+        new() { Id = 17, Text = "I got stuck in an existential crisis.", Category = "general" },
+        new() { Id = 18, Text = "I was time-traveling and lost track of reality.", Category = "general" }
+    ];
 
     [Function("GetRandomExcuse")]
-    public static async Task<HttpResponseData> Run(
+    public async Task<HttpResponseData> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "excuses/random")]
-        HttpRequestData req)
+        HttpRequestData req
+    )
     {
         var randomExcuse = Excuses[new Random().Next(Excuses.Length)];
         var response = req.CreateResponse(HttpStatusCode.OK);
         response.Headers.Add("Content-Type", "application/json");
 
-        var json = JsonSerializer.Serialize(new { excuse = randomExcuse });
+        var json = JsonSerializer.Serialize(randomExcuse);
         await response.WriteStringAsync(json);
 
         return response;
