@@ -39,6 +39,7 @@ public class GetRandomExcuseFunction
     )
     {
         var randomExcuse = Excuses[new Random().Next(Excuses.Length)];
+        
         var response = req.CreateResponse(HttpStatusCode.OK);
         response.Headers.Add("Content-Type", "application/json");
 
